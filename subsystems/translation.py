@@ -1,4 +1,5 @@
 from canlib import canlib, Frame
+import re
 
 coffeeMaker = {0x7E8:"first", 0x7E9: "second", 0x7CA: "requested first", 0x7CB: "requested second"}
 combiOven = {0x7D8:"first", 0x7D9:"second",0x7BA:"requested first",0x7BB:"requested second"}
@@ -33,4 +34,10 @@ def FrameTypeClassifier(frame):
 
 ##only for first frames
 def serialNumber(frame):
-    sN = 
+    dt = frame.data
+    sN = (re.split(r"[']", dt))[1] #reoves the bytearray crap
+    sN = dt[1:] #removes the PCI
+
+    if ('/' in sN):
+        sN = (re.split(r"[\]", sN))
+
