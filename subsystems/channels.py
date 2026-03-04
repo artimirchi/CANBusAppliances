@@ -7,6 +7,9 @@ steamOven = {0x7C8:"first",0x7C9:"second",0x7AA:"requested first",0x7A8:"request
 espressoMaker = {0x7B8:"first",0x7B9:"second",0x79A:"requested first",0x79B:"requested second"}
 airChiller = {0x7A8:"first",0x7A9:"second",0x78A:"requested first",0x78B:"requested second"}
 
+#dicts
+channelStatus = {1:"Error passive", 2: "Bus Off",4:"Error warning",8: "Error active",10:"Some msgs are pending transmission",40:"Works",20:"There are some msgs in the receive buffer",80:"Theres at least one TX error",100:"Theres at least one RX error",200:"Theres one HW buffer overflow",400:"Theres one SW buffer overflow"}
+
 #helper function to obtain data on all the channels connected to the device
 def GetChannelsConnected():
     allChData = []
@@ -41,8 +44,6 @@ def GetChannelMsgs(ch, sCh):
         try:
             frame = sCh.read()
             type = FrameTypeClassifier(frame)
-
-            
 
         except canlib.canNoMsg:
             pass

@@ -8,26 +8,29 @@ airChiller = {0x7A8:"first",0x7A9:"second",0x78A:"requested first",0x78B:"reques
 
 def FrameTypeClassifier(frame):
     currID = frame.id
-
     if (currID in coffeeMaker.keys()):
         frameType = coffeeMaker[currID]
-        return ["coffee maker", frameType]
+        return ["coffeeMaker", frameType]
 
     elif (currID in combiOven.keys()):
         frameType = combiOven[currID]
-        return ["combi oven", frameType]
+        return ["combiOven", frameType]
 
     elif (currID in steamOven.keys()):
         frameType = steamOven[currID]
-        return ["steam oven", frameType]
+        return ["steamOven", frameType]
     
     elif (currID in espressoMaker.keys()):
         frameType = espressoMaker[currID]
-        return ["espresso maker", frameType]
+        return ["espressoMaker", frameType]
     
     elif (currID in airChiller.keys()):
         frameType = airChiller[currID]
-        return ["air chiller", frameType]
+        return ["airChiller", frameType]
 
     else:
         print("\nError: Frame type not recognized")
+
+##only for first frames
+def serialNumber(frame):
+    sN = 
