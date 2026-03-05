@@ -1,5 +1,5 @@
 from canlib import canlib
-from translation import FrameTypeClassifier
+from translation import FrameTypeClassifier, PCIClassifier, PartNumber
 
 coffeeMaker = {0x7E8:"first", 0x7E9: "second", 0x7CA: "requested first", 0x7CB: "requested second"}
 combiOven = {0x7D8:"first", 0x7D9:"second",0x7BA:"requested first",0x7BB:"requested second"}
@@ -43,7 +43,11 @@ def GetChannelMsgs(ch, sCh):
         allClass = []
         try:
             frame = sCh.read()
-            type = FrameTypeClassifier(frame)
+            type = FrameTypeClassifier(frame) #who + type
+            pci = PCIClassifier(frame) #get the frame type
+
+            if (pci == "FstF"):
+                pN = PartNumber(frame)
 
         except canlib.canNoMsg:
             pass
