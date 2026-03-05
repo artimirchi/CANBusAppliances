@@ -141,9 +141,3 @@ def PCIClassifier(frame):
         
         if (hexV[:3] == '0x3'):
             return "FloF" #flow frame
-        
-    
-
-
-
-
