@@ -54,7 +54,7 @@ def PartNumber(frame):
 
     return (d[:3] + '-' + d[3:7] + '-' + d[7:])
 
-def DTCleaner(frame, withX = True):
+def DtCleaner(frame, withX = True):
     cleanDt = ""
     dt = frame.data
     dDt = (frame.data)[10:]
@@ -162,7 +162,7 @@ def PCIClassifier(frame):
 
     else: #uses ascii, just one char, should be the first then
         pci = pci[0]
-        hexV = hex(ord(pci)) #get the corresponding hex
+        hexV = str(hex(ord(pci))) #get the corresponding hex
 
         if (hexV[:3] == '0x2'):
             return "CF" #consec frame
