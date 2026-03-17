@@ -29,7 +29,6 @@ def SelectChannel(s, bitRate):
         print(bitRate)
         print("\nThe bus has been turned on.")
         print("\nCurrent status:" + str(channelStatus[ch.readStatus()]))
-        print(ch.readStatus())
         return ch
     
     else:
@@ -48,8 +47,14 @@ def GetChannelMsgs(ch, sCh):
 
             if (pci == "FstF"):
                 pN = PartNumber(frame)
+            elif (pci == "CF"):
+                pN = PartNumber(frame)
+
 
         except canlib.canNoMsg:
             pass
         except canlib.canError as ex:
             print(ex)
+
+
+            
