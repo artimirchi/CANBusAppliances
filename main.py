@@ -40,7 +40,7 @@ from canlib import Frame
 
 
 def main():
-    a = Frame(8847360, data=bytearray(b'\x00\x00\x00\xf0\x07\x00\x00\x00'), dlc=8, flags=0x4, timestamp=49)
+    a = Frame(8847360, data=bytearray(b'aaaaaaaa'), dlc=8, flags=0x4, timestamp=49)
     #DtCleaner1(a)
 
 # def DTCleaner(frame, withX = True):
@@ -117,10 +117,10 @@ def main():
 
 
 if (__name__ == "__main__"):
-    b = Frame(8847360, data=bytearray(b'a\x00\x00\xf0\x07\x1c\x00\x00'), dlc=8, flags=0x4, timestamp=49)
+    b = Frame(8847360, data=bytearray(b'\x00aaaaaaa'), dlc=8, flags=0x4, timestamp=49)
     #b = Frame(460288, data=bytearray(b'\x00\x19'), dlc=3, flags=4, timestamp=1930)
 
-    print(a(b, True))
+    print(DtCleaner(b, True))
     #print(dt)
     #main()
 

@@ -7,6 +7,8 @@ steamOven = {0x7C8:"first",0x7C9:"second",0x7AA:"requested first",0x7A8:"request
 espressoMaker = {0x7B8:"first",0x7B9:"second",0x79A:"requested first",0x79B:"requested second"}
 airChiller = {0x7A8:"first",0x7A9:"second",0x78A:"requested first",0x78B:"requested second"}
 
+vals = ["0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"]
+
 def FrameTypeClassifier(frame):
     currID = frame.id
     if (currID in coffeeMaker.keys()):
@@ -66,8 +68,9 @@ def DtCleaner(frame, withX = True):
 
     while (i < len(dt)):
         currDt = dt[i]
+        print(dt[i])
         if (i == 0): #then itll include the bytearray shit
-            currDt = currDt[12:]
+            currDt = (currDt[12:])
             if (len(currDt) == 0): #so dt[0] was only the byte array stuff, so its already in hex
                 i += 1
                 currDt = dt[i]
@@ -76,12 +79,23 @@ def DtCleaner(frame, withX = True):
             currDt = currDt[:2]
             print(currDt)
 
-        if (len(currDt) == 2): #then its ok
+        if (len(currDt) == 2 and currDt[0] in vals and currDt[1] in vals): #then its ok
             #print(i)
             if (withX):
                 cleanDt = cleanDt + str("\\x"+ currDt)
             else:
                 cleanDt = cleanDt + str(currDt)
+        
+        elif (len(currDt) == 2): #so correct len, but not hex
+            for j in range(0, len(currDt)):
+                print((currDt[j]))
+                c = ord(currDt[j]) #get the associated hex
+                c = str(hex(c))[2:]
+
+                if (withX):
+                    cleanDt = cleanDt + str("\\x"+ c)
+                else:
+                    cleanDt = cleanDt + str(c)
 
         else: #so the length isnt 2...
             if (i != 0): #dont deal with if its the first element... so there has to be a hex in front of it
