@@ -7,7 +7,7 @@ steamOven = {0x7C8:"first",0x7C9:"second",0x7AA:"requested first",0x7A8:"request
 espressoMaker = {0x7B8:"first",0x7B9:"second",0x79A:"requested first",0x79B:"requested second"}
 airChiller = {0x7A8:"first",0x7A9:"second",0x78A:"requested first",0x78B:"requested second"}
 
-vals = ["0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"]
+vals = ["0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f"]
 
 def FrameTypeClassifier(frame):
     currID = frame.id
@@ -37,24 +37,37 @@ def FrameTypeClassifier(frame):
 ##only for first frames
 def SerialNumber(frame):
     cleanDt = DtCleaner(frame, True)
+    print(cleanDt)
 
     #sep the dt
-    p1 = cleanDt[:2]
-    p2 = cleanDt[2:4]
-    p3 = cleanDt[5:]
+    p1 = cleanDt[2:4]
+    p2 = cleanDt[6:8]
+    p3 = cleanDt[10:12] + cleanDt[14:16] + cleanDt[18:20]
+
 
     #convert to decimal
     dP1 = int(p1, 16)
     dP2 = int(p2, 16)
     dP3 = int(p3, 16)
 
+    if (len(str(dP1)) != 2):
+        dP1 = str(0 * (2 - (len(str(dP1))))) + str (dP1)
+    
+    if (len(str(dP2)) != 2):
+        dP2 = str(0 * (2 - (len(str(dP2))))) + str(dP2)
+
+    if (len(str(dP3)) != 5):
+        dP3 = str(0 * (2 - (len(str(dP3))))) + str(dP3)
+
     return str(dP1) + '-' + str(dP2) + '-' + str(dP3)
 
 def PartNumber(frame):
     cleanDt = DtCleaner(frame, False) #gives full hex
     d = str(int(cleanDt, 16))
+    print(d)
+    print(cleanDt)
 
-    return (d[:3] + '-' + d[3:7] + '-' + d[7:])
+    return (str((d[:3])) + '-' + str((d[3:7])) + '-' + str((d[7:])))
 
 def DtCleaner(frame, withX = True):
     cleanDt = ""

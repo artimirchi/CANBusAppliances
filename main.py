@@ -1,4 +1,4 @@
-from subsystems.translation import DtCleaner
+from subsystems.translation import DtCleaner, SerialNumber, PartNumber
 from canlib import Frame
 
 # def DtCleaner1(frame, withX = False):
@@ -117,10 +117,11 @@ def main():
 
 
 if (__name__ == "__main__"):
-    b = Frame(8847360, data=bytearray(b'\x00aaaaaaa'), dlc=8, flags=0x4, timestamp=49)
+    b = Frame(8847360, data=bytearray(b'\x2F\xB0\xEA\x09'), dlc=4, flags=0x4, timestamp=49)
     #b = Frame(460288, data=bytearray(b'\x00\x19'), dlc=3, flags=4, timestamp=1930)
 
-    print(DtCleaner(b, True))
+    print(PartNumber(b))
+    
     #print(dt)
     #main()
 
