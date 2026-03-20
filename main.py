@@ -117,12 +117,13 @@ def main():
 
 
 if (__name__ == "__main__"):
-    b = Frame(8847360, data=bytearray(b'\x00\x00'), dlc=2, flags=0x4, timestamp=49)
+    b = Frame(8847360, data=bytearray(b'\x0E\x05\x01\x86\x9f'), dlc=2, flags=0x4, timestamp=49)
+    print(SerialNumber(b))
     #b = Frame(460288, data=bytearray(b'\x00\x19'), dlc=3, flags=4, timestamp=1930)
 
     #print(DtCleaner(b))
     
-    print(DtCleanerfml(b, False))
+    #print(DtCleanerfml(b))
     #print(dt)
     #main()
 

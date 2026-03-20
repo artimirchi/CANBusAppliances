@@ -8,6 +8,7 @@ espressoMaker = {0x7B8:"first",0x7B9:"second",0x79A:"requested first",0x79B:"req
 airChiller = {0x7A8:"first",0x7A9:"second",0x78A:"requested first",0x78B:"requested second"}
 
 vals = ["0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f"]
+spec = {"\n":"0a", "\r":"0d", "\b":"20", "\\n":"0a", "\\r":"0d", "\\t":"09", "\t":"09"}
 
 def FrameTypeClassifier(frame):
     currID = frame.id
@@ -36,7 +37,7 @@ def FrameTypeClassifier(frame):
 
 ##only for first frames
 def SerialNumber(frame):
-    cleanDt = DtCleaner(frame, True)
+    cleanDt = DtCleanerfml(frame, True)
     print(cleanDt)
 
     #sep the dt
@@ -62,7 +63,7 @@ def SerialNumber(frame):
     return str(dP1) + '-' + str(dP2) + '-' + str(dP3)
 
 def PartNumber(frame):
-    cleanDt = DtCleaner(frame, False) #gives full hex
+    cleanDt = DtCleanerfml(frame, False) #gives full hex
     d = str(int(cleanDt, 16))
     print(d)
     print(cleanDt)
@@ -240,6 +241,74 @@ def DtCleanerfml(frame, withX = True):
                 cleanDt = cleanDt + dDt
 
             return cleanDt
+        
+    else: #so theres not only hex
+        i = 0
+        currHex = ""
+        while i < len(dt): #if its fully not hex will be fine
+            if (i < len(dt) - 1 and dt[i:i+2] == '\\x'): #then the next two values are hex!!!!
+                currHex = dt[i+2:i+4] #so thats only the hex
+                if (withX):
+                    cleanDt = cleanDt + "\\x" + str(currHex)
+                
+                else:
+                    cleanDt = cleanDt + str(currHex)
+                i += 4
+                # print(dt)
+                # print(dt[i])
+
+            else: #the next value is NOT hex, but have to consider special chars (\n and \r)
+                if (i < len(dt) - 1 and dt[i:i+2] not in spec.keys()): ##change cond, just placeholder, but will need to handle special chars
+                    print(cleanDt)
+                    print(dt)
+                    print(dt[i:i+2])
+                    print(dt[i:i+2] in spec.keys())
+                    currV = dt[i]
+                    print(currV) #hex value of ascii
+                    hexV = ord(currV)
+                    hexV = hex(hexV)
+                    hexV = str(hexV)
+                    hexV = hexV[2:]
+
+                    if (withX):
+                        cleanDt = cleanDt + "\\x" + str(hexV)
+                
+                    else:
+                        cleanDt = cleanDt + str(hexV)
+
+                    i += 1
+                
+                elif (i < len(dt) - 1 and dt[i:i+2] not in spec.keys()): #spec
+                    currV = dt[i:i+2]
+                    hexV = spec[currV]
+
+                    if (withX):
+                        cleanDt = cleanDt + "\\x" + str(hexV)
+                
+                    else:
+                        cleanDt = cleanDt + str(hexV)
+                    i += 2
+
+                else: #so it is a special char
+                    currV = dt[i]
+                    hexV = ord(currV)
+                    hexV = hex(hexV)
+                    hexV = str(hexV)
+                    hexV = hexV[2:]
+
+                    if (withX):
+                        cleanDt = cleanDt + "\\x" + str(hexV)
+                
+                    else:
+                        cleanDt = cleanDt + str(hexV)
+                    
+                    i += 1
+                
+
+        return cleanDt
+
+            
+
    
     
 
