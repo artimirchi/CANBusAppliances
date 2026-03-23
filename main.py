@@ -1,4 +1,4 @@
-from subsystems.translation import DtCleaner, SerialNumber, PartNumber, DtCleanerfml
+from subsystems.translation import DtCleaner, SerialNumber, PartNumber, DtCleanerfml, DataClassifier
 from canlib import Frame
 
 # def DtCleaner1(frame, withX = False):
@@ -141,12 +141,18 @@ def test8(): #ok
     b = Frame(8847360, data=bytearray(b'\xAA\xFDA'), dlc=2, flags=0x4, timestamp=49)
     print(DtCleanerfml(b))
 
+def test9():
+    b = Frame(8847360, data=bytearray(b'\x10\x0F\x0e\x05\x01\x86b'), dlc=2, flags=0x4, timestamp=49)
+    arr = [5, "first"]
+
+    print(DataClassifier(b, arr))
+
 if (__name__ == "__main__"):
     # test1()
     # test2()
     # test3()
     # test4()
-    test7()
+    test9()
     #test6()
     #test7()
     #b = Frame(460288, data=bytearray(b'\x00\x19'), dlc=3, flags=4, timestamp=1930)

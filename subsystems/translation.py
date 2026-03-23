@@ -35,8 +35,33 @@ def FrameTypeClassifier(frame):
     else:
         print("\nError: Frame type not recognized")
 
-##only for first frames
 def SerialNumber(frame):
+    cleanDt = DtCleanerfml(frame, False) #get the full thing
+    sn = cleanDt[4:14]
+
+    year = sn[0:2]
+    month = sn[2:4]
+    day = sn[4:]
+
+    dP1 = int(year, 16)
+    dP2 = int(month, 16)
+    dP3 = int(day, 16)
+
+    if (len(str(dP1)) != 2):
+        dP1 = str(0 * (2 - (len(str(dP1))))) + str (dP1)
+    
+    if (len(str(dP2)) != 2):
+        dP2 = str(0 * (2 - (len(str(dP2))))) + str(dP2)
+
+    if (len(str(dP3)) != 5):
+        dP3 = str(0 * (2 - (len(str(dP3))))) + str(dP3)
+
+    return str(dP1) + '-' + str(dP2) + '-' + str(dP3)
+
+
+
+##only for first frames
+def SerialNumber1(frame):
     cleanDt = DtCleanerfml(frame, True)
     print(cleanDt)
 
@@ -314,12 +339,20 @@ def DtCleanerfml(frame, withX = True):
 
         return cleanDt
 
-            
+def DataClassifier(frame, arr): #arr is the array fromFrameTypeClassifier
+    health = None
+    if (arr[1] == "first"):
+        sn = SerialNumber(frame)
+        return sn
 
-   
-    
 
-
+    elif (arr[1] == "second"):
+        pn = PartNumber(frame)
+        ut = UsageTime(frame)
+        if (arr[0] in ["coffeeMaker","steamOven","combiOven", "espressoMaker", "airChiller"]):
+            health = HealthMonitor(frame)
+        
+        return pn, ut, health
 
 
 
