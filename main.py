@@ -104,21 +104,51 @@ def main():
 #                         cleanDt = cleanDt + str("\\x"+ c)
 #                     else:
 #                         cleanDt = cleanDt + str(c)
-
-                
-                            
-
-
-
 #         i += 1
 #     return cleanDt
 
     #print(dDt)
 
+def test1():
+    b = Frame(8847360, data=bytearray(b'\x0E\x05\x01\x86\x9f'), dlc=2, flags=0x4, timestamp=49)
+    print(DtCleanerfml(b))
+
+def test2(): #ok
+    b = Frame(8847360, data=bytearray(b'aaaaaaaaa'), dlc=2, flags=0x4, timestamp=49)
+    print(DtCleanerfml(b))
+
+def test3(): #ok
+    b = Frame(8847360, data=bytearray(b'\x0a\x0d09'), dlc=2, flags=0x4, timestamp=49)
+    print(DtCleanerfml(b))
+
+def test4(): #ok
+    b = Frame(8847360, data=bytearray(b'\x0E\x05\x01\x86\x9f'), dlc=2, flags=0x4, timestamp=49)
+    print(DtCleanerfml(b))
+
+def test5(): #ok
+    b = Frame(8847360, data=bytearray(b'\x0E\x05ad65)'), dlc=2, flags=0x4, timestamp=49)
+    print(DtCleanerfml(b))
+
+def test6(): #ok
+    b = Frame(8847360, data=bytearray(b'\x0E\x05zxsofkegppl'), dlc=2, flags=0x4, timestamp=49)
+    print(DtCleanerfml(b))
+
+def test7(): #ok
+    b = Frame(8847360, data=bytearray(b'\xAA\\XFDa'), dlc=2, flags=0x4, timestamp=49)
+    print(DtCleanerfml(b))
+
+def test8(): #ok
+    b = Frame(8847360, data=bytearray(b'\xAA\xFDA'), dlc=2, flags=0x4, timestamp=49)
+    print(DtCleanerfml(b))
 
 if (__name__ == "__main__"):
-    b = Frame(8847360, data=bytearray(b'\x0E\x05\x01\x86\x9f'), dlc=2, flags=0x4, timestamp=49)
-    print(SerialNumber(b))
+    # test1()
+    # test2()
+    # test3()
+    # test4()
+    test7()
+    #test6()
+    #test7()
     #b = Frame(460288, data=bytearray(b'\x00\x19'), dlc=3, flags=4, timestamp=1930)
 
     #print(DtCleaner(b))

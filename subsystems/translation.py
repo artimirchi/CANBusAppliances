@@ -263,6 +263,13 @@ def DtCleanerfml(frame, withX = True):
                     print(dt)
                     print(dt[i:i+2])
                     print(dt[i:i+2] in spec.keys())
+                    # if (dt[i: i + 2] == '\\'):
+                    #     i += 1
+                    #     continue
+                    if (dt[i] == '\\'):
+                        i += 1
+                        continue
+                    
                     currV = dt[i]
                     print(currV) #hex value of ascii
                     hexV = ord(currV)
@@ -278,7 +285,7 @@ def DtCleanerfml(frame, withX = True):
 
                     i += 1
                 
-                elif (i < len(dt) - 1 and dt[i:i+2] not in spec.keys()): #spec
+                elif (i < len(dt) - 1 and dt[i:i+2] in spec.keys()): #spec
                     currV = dt[i:i+2]
                     hexV = spec[currV]
 
