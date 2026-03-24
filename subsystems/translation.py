@@ -89,6 +89,7 @@ def SerialNumber1(frame):
 
 def PartNumber(frame):
     cleanDt = DtCleanerfml(frame, False) #gives full hex
+    cleanDt = str(cleanDt)[2:10]
     d = str(int(cleanDt, 16))
     print(d)
     print(cleanDt)
@@ -354,30 +355,39 @@ def DataClassifier(frame, arr): #arr is the array fromFrameTypeClassifier
         
         return pn, ut, health
 
-
-
 def UsageTime(frame):
-    cleanDt = DtCleaner(frame, False)
+    cleanDt = DtCleanerfml(frame, False)
+    cleanDt = str(cleanDt)[10:14]
     t = str(int(cleanDt, 16))
-
     return t
 
-def HealthMonitor(frame):
-    dt = frame.data
-    cleanDt = DtCleaner(frame, False)
+def HealthMonitor(frame, arr):
+    app = arr[0]
 
-    h = str(bin(int(cleanDt, 16)))
+    res = {"Heating system issues": False, "Phase loss": False, "Magnetron issues": False, "Other": False, "Invalid Val": False}
+    cleanDt = DtCleanerfml(frame, False)
+    cleanDt = str(cleanDt)[14:]
+    t = str(int(cleanDt, 16))
+    t = str(bin(int(t)))
 
-    if (h[-1] == 1):
-        print("issue 1")
+    if (len(t) < 8):
+        t = '0' * (8 - len(t)) + t
 
-    if (h[-2] == 1):
-        print("issue 2")
+    if (t[-1] == '1'):
+        if (app != "combiOven"):
+            t["Invalid Val"] = True #the only one with this hould be the microwave. if not microwave thne die
+        res["Magnetron issues"] = True
+
+    if (t[-2] == '1'):
+        res["Phase loss"] = True
     
-    if (h[-3] == 1):
-        print("issue 3")
+    if (t[-3] == '1'):
+        res["Heating system issues"] = True
 
-    return [h[-1] == 1, h[-2] == 1, h[-3] == 1]
+    if ('1' in t[0:5]):
+        res["Other"] = True
+    
+    return res
 
 
 def PCIClassifier(frame):

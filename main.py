@@ -1,5 +1,10 @@
-from subsystems.translation import DtCleaner, SerialNumber, PartNumber, DtCleanerfml, DataClassifier
-from canlib import Frame
+from subsystems.translation import DtCleaner, SerialNumber, PartNumber, DtCleanerfml, DataClassifier, UsageTime, HealthMonitor
+from canlib import Frame, canlib
+from subsystems.channels import GetChannelsConnected
+
+bitRatesCnst = {1: canlib.Bitrate.BITRATE_10K,2: canlib.Bitrate.BITRATE_50K,3: canlib.Bitrate.BITRATE_62K,4: canlib.Bitrate.BITRATE_83K,5: canlib.Bitrate.BITRATE_100K,6: canlib.Bitrate.BITRATE_125K,7: canlib.Bitrate.BITRATE_250K,8: canlib.Bitrate.BITRATE_500K,9: canlib.Bitrate.BITRATE_1M}
+channelStatus = {1:"Error passive", 2: "Bus Off",4:"Error warning",8: "Error active",10:"Some msgs are pending transmission",40:"Works",20:"There are some msgs in the receive buffer",80:"Theres at least one TX error",100:"Theres at least one RX error",200:"Theres one HW buffer overflow",400:"Theres one SW buffer overflow"}
+bitRates = {1: "10kbps",2: "50kbps",3: "62kbps",4: "83kbps",5: "100kbps",6: "125kbps",7: "250kbps",8: "500kbps",9: "1Mbps"}
 
 # def DtCleaner1(frame, withX = False):
 #     cleanDt = ""
@@ -147,16 +152,44 @@ def test9():
 
     print(DataClassifier(b, arr))
 
+def test10():
+    b = Frame(8847360, data=bytearray(b'\x21\x2F\xb0\xea\x09\x7e\xf4\x02'), dlc=2, flags=0x4, timestamp=49)
+    print(UsageTime(b))
+
+def test11():
+    b = Frame(8847360, data=bytearray(b'\x21\x2F\xb0\xea\x09\x7e\xf4\x02'), dlc=2, flags=0x4, timestamp=49)
+    print(PartNumber(b))
+
+def test12():
+    b = Frame(8847360, data=bytearray(b'\x21\x2F\xb0\xea\x09\x7e\xf4\x02'), dlc=2, flags=0x4, timestamp=49)
+    print(HealthMonitor(b))
+
+
+def main1():
+    a = GetChannelsConnected()
+    for i in range (canlib.getNumberOfChannels()):
+        print(str(a[i].channel_number) + ". " + a[i].channel_name)
+
+    ch = int(input("Select the channel number you wish to use:"))
+
+    #select the bitrate to use (for the WS, use 83.33 kbps)
+    print("Select the bitrate you wish to use")
+    bR = int(input(bitRates))
+    sBR = bitRatesCnst[bR]
+
 if (__name__ == "__main__"):
     # test1()
     # test2()
     # test3()
     # test4()
-    test9()
+    #test9()
+    #test10()
+    #test11()
+    #test12()
     #test6()
     #test7()
     #b = Frame(460288, data=bytearray(b'\x00\x19'), dlc=3, flags=4, timestamp=1930)
-
+    main1()
     #print(DtCleaner(b))
     
     #print(DtCleanerfml(b))
