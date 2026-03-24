@@ -1,5 +1,7 @@
 from canlib import canlib, Frame
 import re
+import time
+
 
 coffeeMaker = {0x7E8:"first", 0x7E9: "second", 0x7CA: "requested first", 0x7CB: "requested second"}
 combiOven = {0x7D8:"first", 0x7D9:"second",0x7BA:"requested first",0x7BB:"requested second"}
@@ -9,6 +11,11 @@ airChiller = {0x7A8:"first",0x7A9:"second",0x78A:"requested first",0x78B:"reques
 
 vals = ["0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f"]
 spec = {"\n":"0a", "\r":"0d", "\b":"20", "\\n":"0a", "\\r":"0d", "\\t":"09", "\t":"09"}
+
+apps = {0x7E8:"coffeeMaker",0x7D8:"combiOven",0x7C8:"steamOven",0x7B8:"espressoMaker",0x7A8:"airChiller"}
+
+#global
+allApps = []
 
 def FrameTypeClassifier(frame):
     currID = frame.id
@@ -416,3 +423,38 @@ def PCIClassifier(frame):
         
         elif (hexV[:3] == '0x3'):
             return "FloF" #flow frame
+        
+def getMsgs(sCh):
+    try:
+        frame = sCh.read()
+    except canlib.canNoMsg:
+        pass
+    except canlib.canError as ex:
+        print(ex)
+
+def getMsgs(sCh):
+    try:
+        frame = sCh.read()
+    except canlib.canNoMsg:
+        pass
+    except canlib.canError as ex:
+        print(ex)
+
+def getAppsConnected(sCh):
+    global allApps
+    sT = time.time()
+
+    while (time.time() - sT < 0.5):
+        try:
+            frame = sCh.read()
+            if (frame.id in apps.keys()):
+                if (apps[frame.id] not in allApps):
+                    allApps.append(apps[frame.id])
+
+        except canlib.canNoMsg:
+            pass
+        except canlib.canError as ex:
+            print(ex)
+
+    
+

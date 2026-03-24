@@ -1,4 +1,4 @@
-from subsystems.translation import DtCleaner, SerialNumber, PartNumber, DtCleanerfml, DataClassifier, UsageTime, HealthMonitor
+from subsystems.translation import DtCleaner, SerialNumber, PartNumber, DtCleanerfml, DataClassifier, UsageTime, HealthMonitor, SelectChannel, allApps
 from canlib import Frame, canlib
 from subsystems.channels import GetChannelsConnected
 
@@ -175,7 +175,27 @@ def main1():
     #select the bitrate to use (for the WS, use 83.33 kbps)
     print("Select the bitrate you wish to use")
     bR = int(input(bitRates))
+
     sBR = bitRatesCnst[bR]
+    sCh = SelectChannel(ch, sBR)
+
+    for i in range(len(allApps)):
+        print("\n" + i + ". " + allApps[i])
+
+    c = input("Select the appliance you wish to monitor. You can select multiple, but include commas between their assigned numbers.")
+
+    if (',' in c): #so multiple included
+        c = list(c.split(','))
+
+    else:
+        c = [c]
+    
+    
+    
+
+
+
+        
 
 if (__name__ == "__main__"):
     # test1()
