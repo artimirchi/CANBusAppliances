@@ -6,6 +6,7 @@ bitRatesCnst = {1: canlib.Bitrate.BITRATE_10K,2: canlib.Bitrate.BITRATE_50K,3: c
 channelStatus = {1:"Error passive", 2: "Bus Off",4:"Error warning",8: "Error active",10:"Some msgs are pending transmission",40:"Works",20:"There are some msgs in the receive buffer",80:"Theres at least one TX error",100:"Theres at least one RX error",200:"Theres one HW buffer overflow",400:"Theres one SW buffer overflow"}
 bitRates = {1: "10kbps",2: "50kbps",3: "62kbps",4: "83kbps",5: "100kbps",6: "125kbps",7: "250kbps",8: "500kbps",9: "1Mbps"}
 
+
 # def DtCleaner1(frame, withX = False):
 #     cleanDt = ""
 #     dt = frame.data
@@ -189,8 +190,16 @@ def main1():
 
     else:
         c = [c]
+
+def getMsgs(sCh):
+    try:
+        frame = sCh.read()
+    except canlib.canNoMsg:
+        pass
+    except canlib.canError as ex:
+        print(ex)
     
-    
+
     
 
 

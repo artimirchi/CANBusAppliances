@@ -5,7 +5,7 @@ import time
 
 coffeeMaker = {0x7E8:"first", 0x7E9: "second", 0x7CA: "requested first", 0x7CB: "requested second"}
 combiOven = {0x7D8:"first", 0x7D9:"second",0x7BA:"requested first",0x7BB:"requested second"}
-steamOven = {0x7C8:"first",0x7C9:"second",0x7AA:"requested first",0x7A8:"requested second"}
+steamOven = {0x7C8:"first",0x7C9:"second",0x7AA:"requested first",0x7AB:"requested second"}
 espressoMaker = {0x7B8:"first",0x7B9:"second",0x79A:"requested first",0x79B:"requested second"}
 airChiller = {0x7A8:"first",0x7A9:"second",0x78A:"requested first",0x78B:"requested second"}
 
@@ -13,6 +13,12 @@ vals = ["0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f"]
 spec = {"\n":"0a", "\r":"0d", "\b":"20", "\\n":"0a", "\\r":"0d", "\\t":"09", "\t":"09"}
 
 apps = {0x7E8:"coffeeMaker",0x7D8:"combiOven",0x7C8:"steamOven",0x7B8:"espressoMaker",0x7A8:"airChiller"}
+
+first = {0x7E8:"coffeeMaker",0x7D8:"combiOven",0x7C8:"steamOven",0x7B8:"espressoMaker",0x7A8:"airChiller"}
+second = {0x7E9:"coffeeMaker",0x7D9:"combiOven",0x7C9:"steamOven",0x7B9:"espressoMaker",0x7A9:"airChiller"}
+rqf = {0x7CA:"coffeeMaker",0x7BA:"combiOven",0x7AA:"steamOven",0x79A:"espressoMaker",0x78A:"airChiller"}
+rqs = {0x7CB:"coffeeMaker",0x7BB:"combiOven",0x7AB:"steamOven",0x79B:"espressoMaker",0x78B:"airChiller"}
+
 
 #global
 allApps = []
@@ -432,13 +438,6 @@ def getMsgs(sCh):
     except canlib.canError as ex:
         print(ex)
 
-def getMsgs(sCh):
-    try:
-        frame = sCh.read()
-    except canlib.canNoMsg:
-        pass
-    except canlib.canError as ex:
-        print(ex)
 
 def getAppsConnected(sCh):
     global allApps
@@ -455,6 +454,8 @@ def getAppsConnected(sCh):
             pass
         except canlib.canError as ex:
             print(ex)
+
+
 
     
 
