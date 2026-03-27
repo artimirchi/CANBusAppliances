@@ -1,5 +1,5 @@
 from canlib import canlib
-from translation import FrameTypeClassifier, PCIClassifier, PartNumber, SerialNumber, UsageTime, HealthMonitor
+from subsystems.translation import FrameTypeClassifier, PCIClassifier, PartNumber, SerialNumber, UsageTime, HealthMonitor, getAppsConnected, allApps
 
 coffeeMaker = {0x7E8:"first", 0x7E9: "second", 0x7CA: "requested first", 0x7CB: "requested second"}
 combiOven = {0x7D8:"first", 0x7D9:"second",0x7BA:"requested first",0x7BB:"requested second"}
@@ -36,13 +36,15 @@ def SelectChannel(s, bitRate):
         return None
     ##can create an exception class to handle this when making the GUI
 
-def GetChannelMsgs(ch, sCh):
+def GetChannelMsgs(ch, sCh, sel):
     while (True):
         allFrames = []
         allClass = []
         try:
             frame = sCh.read() #get da frame
             type = FrameTypeClassifier(frame) #who + type
+            if (type[0] not in sel):
+                continue
             pci = PCIClassifier(frame) #get the frame type
 
             if (pci == "FstF"):
@@ -57,5 +59,29 @@ def GetChannelMsgs(ch, sCh):
         except canlib.canError as ex:
             print(ex)
 
+
+def getAppSelection():
+    getAppsConnected()
+
+    for i in range(len(allApps)):
+        print("\n" + i + ". " + allApps[i])
+
+    c = input("Select the appliance you wish to monitor. You can select multiple, but include commas between their assigned numbers.")
+    c = c.split(',')
+
+    a = []
+
+    for i in range (len(c)):
+        if (c[i] > len(allApps)):
+            print("\nThe selected appliance no." +c[i]+ " does not exist. Its selection will be ignored.")
+        else:
+            a.append(c[i])
+
+    if (len(a) == 0):
+        return None
+    
+    else:
+        return a
+                
 
             

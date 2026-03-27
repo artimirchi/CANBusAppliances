@@ -1,6 +1,6 @@
-from subsystems.translation import DtCleaner, SerialNumber, PartNumber, DtCleanerfml, DataClassifier, UsageTime, HealthMonitor, SelectChannel, allApps
+from subsystems.channels import GetChannelsConnected, getAppSelection, GetChannelMsgs, SelectChannel
+from subsystems.translation import DtCleaner, SerialNumber, PartNumber, DtCleanerfml, DataClassifier, UsageTime, HealthMonitor,  allApps, getAppsConnected
 from canlib import Frame, canlib
-from subsystems.channels import GetChannelsConnected
 
 bitRatesCnst = {1: canlib.Bitrate.BITRATE_10K,2: canlib.Bitrate.BITRATE_50K,3: canlib.Bitrate.BITRATE_62K,4: canlib.Bitrate.BITRATE_83K,5: canlib.Bitrate.BITRATE_100K,6: canlib.Bitrate.BITRATE_125K,7: canlib.Bitrate.BITRATE_250K,8: canlib.Bitrate.BITRATE_500K,9: canlib.Bitrate.BITRATE_1M}
 channelStatus = {1:"Error passive", 2: "Bus Off",4:"Error warning",8: "Error active",10:"Some msgs are pending transmission",40:"Works",20:"There are some msgs in the receive buffer",80:"Theres at least one TX error",100:"Theres at least one RX error",200:"Theres one HW buffer overflow",400:"Theres one SW buffer overflow"}
@@ -180,16 +180,21 @@ def main1():
     sBR = bitRatesCnst[bR]
     sCh = SelectChannel(ch, sBR)
 
-    for i in range(len(allApps)):
-        print("\n" + i + ". " + allApps[i])
+    a = getAppsConnected
 
-    c = input("Select the appliance you wish to monitor. You can select multiple, but include commas between their assigned numbers.")
-
-    if (',' in c): #so multiple included
-        c = list(c.split(','))
-
+    if (a == None):
+        raise ValueError("\nNone of the appliances selected exist.")
     else:
-        c = [c]
+        sel = []
+        for i in range (len(a)):
+            sel = allApps[a[i]]
+
+        GetChannelMsgs(ch, sCh, sel)
+
+    
+ 
+
+
 
 def getMsgs(sCh):
     try:
