@@ -48,12 +48,27 @@ def GetChannelMsgs(ch, sCh, sel):
             pci = PCIClassifier(frame) #get the frame type
 
             if (pci == "FstF"):
-                pN = SerialNumber(frame)
+                sN = SerialNumber(frame)
+                print("\nThe serial number of the " +type[0] + " is" + str(sN))
+
             elif (pci == "CF"):
                 pN = PartNumber(frame)
-                uT = UsageTime(frame)
-                hM = HealthMonitor(frame)
+                print("\nThe part number of the " +type[0] + " is" + str(pN))
 
+                uT = UsageTime(frame)
+                print("\nThe total usage time of the " + type[0]+"is " + str(uT) +" hours")
+
+                hM = HealthMonitor(frame, type)
+                
+                if (hM["Heating system issues"] == True):
+                    print("The " + type[0] +" has heating system issues")
+                if (hM["Phase loss"] == True):
+                    print("The " + type[0] +" has phase loss issues")
+                if (hM["Magnetron issues"] == True):
+                    print("The " + type[0] +" has magnetron issues")
+                if (hM["Heating system issues"] == False and hM["Phase loss"] == False and hM["Magnetron issues"] == False):
+                    print("\nNo issues found with "+type[0])
+                
         except canlib.canNoMsg:
             pass
         except canlib.canError as ex:

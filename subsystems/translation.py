@@ -3,21 +3,28 @@ import re
 import time
 
 
-coffeeMaker = {0x7E8:"first", 0x7E9: "second", 0x7CA: "requested first", 0x7CB: "requested second"}
-combiOven = {0x7D8:"first", 0x7D9:"second",0x7BA:"requested first",0x7BB:"requested second"}
-steamOven = {0x7C8:"first",0x7C9:"second",0x7AA:"requested first",0x7AB:"requested second"}
-espressoMaker = {0x7B8:"first",0x7B9:"second",0x79A:"requested first",0x79B:"requested second"}
-airChiller = {0x7A8:"first",0x7A9:"second",0x78A:"requested first",0x78B:"requested second"}
+CoffeeMaker = {0x7E8:"first", 0x7E9: "second", 0x7CA: "requested first", 0x7CB: "requested second"}
+CombiOven = {0x7D8:"first", 0x7D9:"second",0x7BA:"requested first",0x7BB:"requested second"}
+SteamOven = {0x7C8:"first",0x7C9:"second",0x7AA:"requested first",0x7AB:"requested second"}
+EspressoMaker = {0x7B8:"first",0x7B9:"second",0x79A:"requested first",0x79B:"requested second"}
+AirChiller = {0x7A8:"first",0x7A9:"second",0x78A:"requested first",0x78B:"requested second"}
 
 vals = ["0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f"]
 spec = {"\n":"0a", "\r":"0d", "\b":"20", "\\n":"0a", "\\r":"0d", "\\t":"09", "\t":"09"}
 
-apps = {0x7E8:"coffeeMaker",0x7D8:"combiOven",0x7C8:"steamOven",0x7B8:"espressoMaker",0x7A8:"airChiller"}
+apps = {0x7E8:"Coffee Maker",0x7D8:"Combi Oven",0x7C8:"Steam Oven",0x7B8:"Espresso Maker",0x7A8:"Air Chiller"}
 
-first = {0x7E8:"coffeeMaker",0x7D8:"combiOven",0x7C8:"steamOven",0x7B8:"espressoMaker",0x7A8:"airChiller"}
-second = {0x7E9:"coffeeMaker",0x7D9:"combiOven",0x7C9:"steamOven",0x7B9:"espressoMaker",0x7A9:"airChiller"}
-rqf = {0x7CA:"coffeeMaker",0x7BA:"combiOven",0x7AA:"steamOven",0x79A:"espressoMaker",0x78A:"airChiller"}
-rqs = {0x7CB:"coffeeMaker",0x7BB:"combiOven",0x7AB:"steamOven",0x79B:"espressoMaker",0x78B:"airChiller"}
+first = {0x7E8:"Coffee Maker",0x7D8:"Combi Oven",0x7C8:"Steam Oven",0x7B8:"Espresso Maker",0x7A8:"Air Chiller"}
+second = {0x7E9:"Coffee Maker",0x7D9:"Combi Oven",0x7C9:"Steam Oven",0x7B9:"Espresso Maker",0x7A9:"Air Chiller"}
+rqf = {0x7CA:"Coffee Maker",0x7BA:"Combi Oven",0x7AA:"Steam Oven",0x79A:"Espresso Maker",0x78A:"Air Chiller"}
+rqs = {0x7CB:"Coffee Maker",0x7BB:"Combi Oven",0x7AB:"Steam Oven",0x79B:"Espresso Maker",0x78B:"Air Chiller"}
+
+cMI = {"Heating system issues": False, "Phase loss": False, "Magnetron issues": False, "Other": False, "Invalid Val": False}
+cOI= {"Heating system issues": False, "Phase loss": False, "Magnetron issues": False, "Other": False, "Invalid Val": False}
+sOI = {"Heating system issues": False, "Phase loss": False, "Magnetron issues": False, "Other": False, "Invalid Val": False}
+eMI = {"Heating system issues": False, "Phase loss": False, "Magnetron issues": False, "Other": False, "Invalid Val": False}
+aCI = {"Heating system issues": False, "Phase loss": False, "Magnetron issues": False, "Other": False, "Invalid Val": False}
+appsStatus = [cMI,cOI,sOI,eMI,aCI]
 
 
 #global
@@ -26,25 +33,25 @@ allApps = []
 ##get the frame type and the appliance its from
 def FrameTypeClassifier(frame):
     currID = frame.id
-    if (currID in coffeeMaker.keys()):
-        frameType = coffeeMaker[currID]
-        return ["coffeeMaker", frameType]
+    if (currID in CoffeeMaker.keys()):
+        frameType = CoffeeMaker[currID]
+        return ["Coffee Maker", frameType]
 
-    elif (currID in combiOven.keys()):
-        frameType = combiOven[currID]
-        return ["combiOven", frameType]
+    elif (currID in CombiOven.keys()):
+        frameType = CombiOven[currID]
+        return ["Combi Oven", frameType]
 
-    elif (currID in steamOven.keys()):
-        frameType = steamOven[currID]
-        return ["steamOven", frameType]
+    elif (currID in SteamOven.keys()):
+        frameType = SteamOven[currID]
+        return ["Steam Oven", frameType]
     
-    elif (currID in espressoMaker.keys()):
-        frameType = espressoMaker[currID]
-        return ["espressoMaker", frameType]
+    elif (currID in EspressoMaker.keys()):
+        frameType = EspressoMaker[currID]
+        return ["Espresso Maker", frameType]
     
-    elif (currID in airChiller.keys()):
-        frameType = airChiller[currID]
-        return ["airChiller", frameType]
+    elif (currID in AirChiller.keys()):
+        frameType = AirChiller[currID]
+        return ["Air Chiller", frameType]
 
     else:
         print("\nError: Frame type not recognized")
@@ -364,7 +371,7 @@ def DataClassifier(frame, arr): #arr is the array fromFrameTypeClassifier
     elif (arr[1] == "second"):
         pn = PartNumber(frame)
         ut = UsageTime(frame)
-        if (arr[0] in ["coffeeMaker","steamOven","combiOven", "espressoMaker", "airChiller"]):
+        if (arr[0] in ["Coffee Maker","Steam Oven","Combi Oven", "Espresso Maker", "Air Chiller"]):
             health = HealthMonitor(frame)
         
         return pn, ut, health
@@ -388,8 +395,8 @@ def HealthMonitor(frame, arr):
         t = '0' * (8 - len(t)) + t
 
     if (t[-1] == '1'):
-        if (app != "combiOven"):
-            t["Invalid Val"] = True #the only one with this hould be the microwave. if not microwave thne die
+        if (app != "Combi Oven"):
+            res["Invalid Val"] = True #the only one with this hould be the microwave. if not microwave thne die
         res["Magnetron issues"] = True
 
     if (t[-2] == '1'):
