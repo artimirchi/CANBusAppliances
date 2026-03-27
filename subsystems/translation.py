@@ -23,6 +23,7 @@ rqs = {0x7CB:"coffeeMaker",0x7BB:"combiOven",0x7AB:"steamOven",0x79B:"espressoMa
 #global
 allApps = []
 
+##get the frame type and the appliance its from
 def FrameTypeClassifier(frame):
     currID = frame.id
     if (currID in coffeeMaker.keys()):
@@ -404,7 +405,7 @@ def HealthMonitor(frame, arr):
 
 
 def PCIClassifier(frame):
-    dt = frame.data
+    dt = str(frame.data)
     dt = dt.split("'") #could be an issue later if there are ascii of '
 
     if ('\\' in dt):
