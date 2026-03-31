@@ -60,14 +60,14 @@ def GetChannelMsgs(ch, sCh, sel):
                 
                 if (type[0] not in sNS.keys() or sNS[type[0]] != sN):
                     sNS[type[0]] = sN
-                    print("\nThe serial number of the " +type[0] + " is" + str(sN))
+                    print("\nThe serial number of the " +type[0] + " is " + str(sN))
 
             elif (pci == "CF"):
                 pN = PartNumber(frame)
 
                 if (type[0] not in pNS.keys() or pNS[type[0]] != pN):
                     pNS[type[0]] = pN
-                    print("\nThe part number of the " +type[0] + " is" + str(pN))
+                    print("\nThe part number of the " +type[0] + " is " + str(pN))
             
                 uT = UsageTime(frame)
                 if (type[0] not in uTS.keys() or uTS[type[0]] != uT):
@@ -101,7 +101,10 @@ def GetChannelMsgstest(ch = None, sCh = None, sel = None):
         allFrames = []
         allClass = []
         try:
-            frame = Frame(0x7e8, data=bytearray(b'\x10\x0F\x0E\x05\x01\x86\x9F'), dlc=5, flags=0x2, timestamp=49)
+            #frame = Frame(0x7e8, data=bytearray(b'\x10\x0F\x0E\x05\x01\x86\x9F'), dlc=5, flags=0x2, timestamp=49)
+            #frame = Frame(0x7e9, data=bytearray(b'\x21\x2f\xb0\xea\x09\x7e\xf4\x02'), dlc=5, flags=0x2, timestamp=49)
+            frame = Frame(0x7e9, data=bytearray(b'\x10\x0F\x10\x0b\x00\x9e\x3f'), dlc=5, flags=0x2, timestamp=49)
+
             type = FrameTypeClassifier(frame) #who + type
             # if (type[0] not in sel):
             #     continue
@@ -112,14 +115,14 @@ def GetChannelMsgstest(ch = None, sCh = None, sel = None):
                 
                 if (type[0] not in sNS.keys() or sNS[type[0]] != sN):
                     sNS[type[0]] = sN
-                    print("\nThe serial number of the " +type[0] + " is" + str(sN))
+                    print("\nThe serial number of the " +type[0] + " is " + str(sN))
 
             elif (pci == "CF"):
                 pN = PartNumber(frame)
 
                 if (type[0] not in pNS.keys() or pNS[type[0]] != pN):
                     pNS[type[0]] = pN
-                    print("\nThe part number of the " +type[0] + " is" + str(pN))
+                    print("\nThe part number of the " +type[0] + " is " + str(pN))
             
                 uT = UsageTime(frame)
                 if (type[0] not in uTS.keys() or uTS[type[0]] != uT):
