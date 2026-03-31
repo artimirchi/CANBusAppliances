@@ -1,4 +1,4 @@
-from subsystems.channels import GetChannelsConnected, getAppSelection, GetChannelMsgs, SelectChannel
+from subsystems.channels import GetChannelsConnected, getAppSelection, GetChannelMsgs, SelectChannel, GetChannelMsgstest
 from subsystems.translation import DtCleaner, SerialNumber, PartNumber, DtCleanerfml, DataClassifier, UsageTime, HealthMonitor,  allApps, getAppsConnected
 from canlib import Frame, canlib
 
@@ -191,6 +191,9 @@ def main1():
 
         GetChannelMsgs(ch, sCh, sel)
 
+def test13():
+    b = Frame(8847360, data=bytearray(b'\x0E\x05\x01\x86\x9f'), dlc=2, flags=0x4, timestamp=49)
+
         
 
     
@@ -207,7 +210,8 @@ def getMsgs(sCh):
         print(ex)
     
 
-    
+def test111():
+    GetChannelMsgstest()
 
 
 
@@ -217,7 +221,8 @@ if (__name__ == "__main__"):
     # test1()
     # test2()
     # test3()
-    # test4()
+    #test4()
+    test111()
     #test9()
     #test10()
     #test11()
@@ -225,7 +230,7 @@ if (__name__ == "__main__"):
     #test6()
     #test7()
     #b = Frame(460288, data=bytearray(b'\x00\x19'), dlc=3, flags=4, timestamp=1930)
-    main1()
+    #main1()
     #print(DtCleaner(b))
     
     #print(DtCleanerfml(b))

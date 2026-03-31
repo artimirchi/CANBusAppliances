@@ -1,5 +1,6 @@
-from canlib import canlib
-from subsystems.translation import FrameTypeClassifier, PCIClassifier, PartNumber, SerialNumber, UsageTime, HealthMonitor, getAppsConnected, allApps
+from canlib import canlib, Frame
+from subsystems.translation import FrameTypeClassifier, PCIClassifier, PartNumber, SerialNumber, UsageTime, HealthMonitor, getAppsConnected, allApps, PCIClassifier1
+import keyboard
 
 coffeeMaker = {0x7E8:"first", 0x7E9: "second", 0x7CA: "requested first", 0x7CB: "requested second"}
 combiOven = {0x7D8:"first", 0x7D9:"second",0x7BA:"requested first",0x7BB:"requested second"}
@@ -7,8 +8,10 @@ steamOven = {0x7C8:"first",0x7C9:"second",0x7AA:"requested first",0x7A8:"request
 espressoMaker = {0x7B8:"first",0x7B9:"second",0x79A:"requested first",0x79B:"requested second"}
 airChiller = {0x7A8:"first",0x7A9:"second",0x78A:"requested first",0x78B:"requested second"}
 
+
 #dicts
 channelStatus = {1:"Error passive", 2: "Bus Off",4:"Error warning",8: "Error active",10:"Some msgs are pending transmission",40:"Works",20:"There are some msgs in the receive buffer",80:"Theres at least one TX error",100:"Theres at least one RX error",200:"Theres one HW buffer overflow",400:"Theres one SW buffer overflow"}
+
 
 #helper function to obtain data on all the channels connected to the device
 def GetChannelsConnected():
@@ -37,6 +40,11 @@ def SelectChannel(s, bitRate):
     ##can create an exception class to handle this when making the GUI
 
 def GetChannelMsgs(ch, sCh, sel):
+    pNS = {}
+    sNS = {}
+    uTS = {}
+    hMS = {}
+
     while (True):
         allFrames = []
         allClass = []
@@ -49,31 +57,90 @@ def GetChannelMsgs(ch, sCh, sel):
 
             if (pci == "FstF"):
                 sN = SerialNumber(frame)
-                print("\nThe serial number of the " +type[0] + " is" + str(sN))
+                
+                if (type[0] not in sNS.keys() or sNS[type[0]] != sN):
+                    sNS[type[0]] = sN
+                    print("\nThe serial number of the " +type[0] + " is" + str(sN))
 
             elif (pci == "CF"):
                 pN = PartNumber(frame)
-                print("\nThe part number of the " +type[0] + " is" + str(pN))
 
+                if (type[0] not in pNS.keys() or pNS[type[0]] != pN):
+                    pNS[type[0]] = pN
+                    print("\nThe part number of the " +type[0] + " is" + str(pN))
+            
                 uT = UsageTime(frame)
-                print("\nThe total usage time of the " + type[0]+"is " + str(uT) +" hours")
+                if (type[0] not in uTS.keys() or uTS[type[0]] != uT):
+                    uTS[type[0]] = uT
+                    print("\nThe total usage time of the " + type[0]+"is " + str(uT) +" hours")
 
                 hM = HealthMonitor(frame, type)
-                
-                if (hM["Heating system issues"] == True):
-                    print("The " + type[0] +" has heating system issues")
-                if (hM["Phase loss"] == True):
-                    print("The " + type[0] +" has phase loss issues")
-                if (hM["Magnetron issues"] == True):
-                    print("The " + type[0] +" has magnetron issues")
-                if (hM["Heating system issues"] == False and hM["Phase loss"] == False and hM["Magnetron issues"] == False):
-                    print("\nNo issues found with "+type[0])
-                
+                if (type[0] not in hMS.keys() or hMS[type[0]] != hMS):
+                    if (hM["Heating system issues"] == True):
+                        print("The " + type[0] +" has heating system issues")
+                    if (hM["Phase loss"] == True):
+                        print("The " + type[0] +" has phase loss issues")
+                    if (hM["Magnetron issues"] == True):
+                        print("The " + type[0] +" has magnetron issues")
+                    if (hM["Heating system issues"] == False and hM["Phase loss"] == False and hM["Magnetron issues"] == False):
+                        print("\nNo issues found with "+type[0])
+                    
         except canlib.canNoMsg:
             pass
         except canlib.canError as ex:
             print(ex)
 
+
+def GetChannelMsgstest(ch = None, sCh = None, sel = None):
+    pNS = {}
+    sNS = {}
+    uTS = {}
+    hMS = {}
+
+    while (True):
+        allFrames = []
+        allClass = []
+        try:
+            frame = Frame(0x7e8, data=bytearray(b'\x10\x0F\x0E\x05\x01\x86\x9F'), dlc=5, flags=0x2, timestamp=49)
+            type = FrameTypeClassifier(frame) #who + type
+            # if (type[0] not in sel):
+            #     continue
+            pci = PCIClassifier1(frame) #get the frame type
+
+            if (pci == "FstF"):
+                sN = SerialNumber(frame)
+                
+                if (type[0] not in sNS.keys() or sNS[type[0]] != sN):
+                    sNS[type[0]] = sN
+                    print("\nThe serial number of the " +type[0] + " is" + str(sN))
+
+            elif (pci == "CF"):
+                pN = PartNumber(frame)
+
+                if (type[0] not in pNS.keys() or pNS[type[0]] != pN):
+                    pNS[type[0]] = pN
+                    print("\nThe part number of the " +type[0] + " is" + str(pN))
+            
+                uT = UsageTime(frame)
+                if (type[0] not in uTS.keys() or uTS[type[0]] != uT):
+                    uTS[type[0]] = uT
+                    print("\nThe total usage time of the " + type[0]+"is " + str(uT) +" hours")
+
+                hM = HealthMonitor(frame, type)
+                if (type[0] not in hMS.keys() or hMS[type[0]] != hMS):
+                    if (hM["Heating system issues"] == True):
+                        print("The " + type[0] +" has heating system issues")
+                    if (hM["Phase loss"] == True):
+                        print("The " + type[0] +" has phase loss issues")
+                    if (hM["Magnetron issues"] == True):
+                        print("The " + type[0] +" has magnetron issues")
+                    if (hM["Heating system issues"] == False and hM["Phase loss"] == False and hM["Magnetron issues"] == False):
+                        print("\nNo issues found with "+type[0])
+                    
+        except canlib.canNoMsg:
+            pass
+        except canlib.canError as ex:
+            print(ex)
 
 def getAppSelection():
     getAppsConnected()

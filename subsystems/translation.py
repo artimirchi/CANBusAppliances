@@ -80,7 +80,7 @@ def SerialNumber(frame):
     return str(dP1) + '-' + str(dP2) + '-' + str(dP3)
 
 
-
+#unused
 ##only for first frames
 def SerialNumber1(frame):
     cleanDt = DtCleanerfml(frame, True)
@@ -194,6 +194,7 @@ def DtCleaner(frame, withX = True):
         i += 1
     return cleanDt
 
+#not used
 def DtCleaner1(frame, withX = True):
     cleanDt = ""
     dt = str(frame.data)
@@ -271,6 +272,7 @@ def DtCleaner1(frame, withX = True):
     #     i += 1
     # return cleanDt
 
+#final ver (?)
 def DtCleanerfml(frame, withX = True):
     cleanDt = ""
     dt = str(frame.data)[12:]
@@ -410,6 +412,27 @@ def HealthMonitor(frame, arr):
     
     return res
 
+def PCIClassifier1(frame):
+    dt = str(frame.data)
+    dt = DtCleanerfml(frame, False)
+
+    pci = dt[0]
+    
+    if (pci == '1'):
+        return "FstF"
+    elif (pci == '2'):
+        return "CF"
+    
+    elif (pci == '3'):
+        return "FloC"
+    
+    elif (pci == '0'):
+        return "SF"
+
+
+
+
+
 
 def PCIClassifier(frame):
     dt = str(frame.data)
@@ -419,7 +442,7 @@ def PCIClassifier(frame):
         dt = dt.split('\\')
         print(dt)
 
-    pci = dt[0] #gets the first char
+    pci = dt[1] #gets the first char
     if (pci[0] == 'x'): #then it uses hex...
         pci = pci[1:]
         if (pci[0] == '1'):
