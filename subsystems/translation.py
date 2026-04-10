@@ -69,13 +69,14 @@ def SerialNumber(frame):
     dP3 = int(day, 16)
 
     if (len(str(dP1)) != 2):
-        dP1 = str(0 * (2 - (len(str(dP1))))) + str (dP1)
+        dP1 = str('0' * (2 - (len(str(dP1))))) + str (dP1)
     
     if (len(str(dP2)) != 2):
-        dP2 = str(0 * (2 - (len(str(dP2))))) + str(dP2)
+        dP2 = str('0' * (2 - (len(str(dP2))))) + str(dP2)
 
     if (len(str(dP3)) != 5):
-        dP3 = str(0 * (2 - (len(str(dP3))))) + str(dP3)
+        print(len(str(dP3)))
+        dP3 = str('0' * (5 - (len(str(dP3))))) + str(dP3)
 
     return str(dP1) + '-' + str(dP2) + '-' + str(dP3)
 

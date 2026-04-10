@@ -103,7 +103,12 @@ def GetChannelMsgstest(ch = None, sCh = None, sel = None):
         try:
             #frame = Frame(0x7e8, data=bytearray(b'\x10\x0F\x0E\x05\x01\x86\x9F'), dlc=5, flags=0x2, timestamp=49)
             #frame = Frame(0x7e9, data=bytearray(b'\x21\x2f\xb0\xea\x09\x7e\xf4\x02'), dlc=5, flags=0x2, timestamp=49)
-            frame = Frame(0x7e9, data=bytearray(b'\x10\x0F\x10\x0b\x00\x9e\x3f'), dlc=5, flags=0x2, timestamp=49)
+            #frame = Frame(0x7e8, data=bytearray(b'\x10\x0F\x19\x06\x00\x01\x29'), dlc=5, flags=0x2, timestamp=49) #ok
+            #frame = Frame(0x7e9, data=bytearray(b'\x21\x2f\xb0\xea\x09\x7e\xf4\x02'), dlc=5, flags=0x2, timestamp=49)
+            #frame = Frame(0x7e9, data=bytearray(b'\x21\x00\x00\x00\x04\xB0\xf4\x02'), dlc=5, flags=0x2, timestamp=49)
+
+            #frame = Frame(0x7e8, data=bytearray(b'\x10\x0F\x11\x0B\x00\x1B\x3B'), dlc=5, flags=0x2, timestamp=49)
+            frame = Frame(0x7e8, data=bytearray(b'\x10\x0F\x0F\x08\x00\x00\x04'), dlc=5, flags=0x2, timestamp=49)
 
             type = FrameTypeClassifier(frame) #who + type
             # if (type[0] not in sel):
