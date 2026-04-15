@@ -142,6 +142,7 @@ def GetChannelMsgstest(ch = None, sCh = None, sel = None):
 
                 hM = HealthMonitor(frame, type)
                 if (type[0] not in hMS.keys() or hMS[type[0]] != hMS):
+                    hMS[type[0]] = hMS
                     if (hM["Heating system issues"] == True):
                         print("The " + type[0] +" has heating system issues")
                     if (hM["Phase loss"] == True):
