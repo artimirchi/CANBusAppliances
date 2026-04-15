@@ -104,11 +104,17 @@ def GetChannelMsgstest(ch = None, sCh = None, sel = None):
             #frame = Frame(0x7e8, data=bytearray(b'\x10\x0F\x0E\x05\x01\x86\x9F'), dlc=5, flags=0x2, timestamp=49)
             #frame = Frame(0x7e9, data=bytearray(b'\x21\x2f\xb0\xea\x09\x7e\xf4\x02'), dlc=5, flags=0x2, timestamp=49)
             #frame = Frame(0x7e8, data=bytearray(b'\x10\x0F\x19\x06\x00\x01\x29'), dlc=5, flags=0x2, timestamp=49) #ok
-            #frame = Frame(0x7e9, data=bytearray(b'\x21\x2f\xb0\xea\x09\x7e\xf4\x02'), dlc=5, flags=0x2, timestamp=49)
+            #frame = Frame(0x7e9, data=bytearray(b'\x21\x2f\xb0\xeB\x09\x7e\xf4\x02'), dlc=5, flags=0x2, timestamp=49)
             #frame = Frame(0x7e9, data=bytearray(b'\x21\x00\x00\x00\x04\xB0\xf4\x02'), dlc=5, flags=0x2, timestamp=49)
+            frame = Frame(0x7e9, data=bytearray(b'\x21\x35\xf1\x35\x09\x7E\xf4\x02'), dlc=5, flags=0x2, timestamp=49)
+
 
             #frame = Frame(0x7e8, data=bytearray(b'\x10\x0F\x11\x0B\x00\x1B\x3B'), dlc=5, flags=0x2, timestamp=49)
-            frame = Frame(0x7e8, data=bytearray(b'\x10\x0F\x0F\x08\x00\x00\x04'), dlc=5, flags=0x2, timestamp=49)
+            #frame = Frame(0x7e8, data=bytearray(b'\x10\x0F\x19\x06\x00\x01\x26'), dlc=5, flags=0x2, timestamp=49)
+            #frame = Frame(0x7e8, data=bytearray(b'\x10\x0F\x19\x0A\x00\x9D\xAD'), dlc=5, flags=0x2, timestamp=49)
+            #frame = Frame(0x7e8, data=bytearray(b'\x10\x0F\x19\x0B\x00\x9E\x3F'), dlc=5, flags=0x2, timestamp=49)
+            #frame = Frame(0x7e8, data=bytearray(b'\x10\x0F\x19\x07\x00\x01\x29'), dlc=5, flags=0x2, timestamp=49)
+            #frame = Frame(0x7e8, data=bytearray(b'\x10\x0F\x11\x0B\x00\x02\xB9'), dlc=5, flags=0x2, timestamp=49)
 
             type = FrameTypeClassifier(frame) #who + type
             # if (type[0] not in sel):
@@ -132,7 +138,7 @@ def GetChannelMsgstest(ch = None, sCh = None, sel = None):
                 uT = UsageTime(frame)
                 if (type[0] not in uTS.keys() or uTS[type[0]] != uT):
                     uTS[type[0]] = uT
-                    print("\nThe total usage time of the " + type[0]+"is " + str(uT) +" hours")
+                    print("\nThe total usage time of the " + type[0]+" is " + str(uT) +" hours")
 
                 hM = HealthMonitor(frame, type)
                 if (type[0] not in hMS.keys() or hMS[type[0]] != hMS):

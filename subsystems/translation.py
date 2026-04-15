@@ -85,7 +85,7 @@ def SerialNumber(frame):
 ##only for first frames
 def SerialNumber1(frame):
     cleanDt = DtCleanerfml(frame, True)
-    print(cleanDt)
+    #print(cleanDt)
 
     #sep the dt
     p1 = cleanDt[2:4]
@@ -113,8 +113,12 @@ def PartNumber(frame):
     cleanDt = DtCleanerfml(frame, False) #gives full hex
     cleanDt = str(cleanDt)[2:10]
     d = str(int(cleanDt, 16))
-    print(d)
-    print(cleanDt)
+    
+    if (len(d) != 9):
+        d = (9 - len(d)) * '0' + d
+
+    #print(d)
+    #print(cleanDt)
 
     return (str((d[:3])) + '-' + str((d[3:7])) + '-' + str((d[7:])))
 
@@ -278,7 +282,7 @@ def DtCleanerfml(frame, withX = True):
     cleanDt = ""
     dt = str(frame.data)[12:]
     dt = dt[:-2]
-    print(len(dt))
+    #print(len(dt))
 
     if (len(dt)/4 == frame.dlc): #if true: then we only have hex!
         if (withX):
@@ -309,10 +313,10 @@ def DtCleanerfml(frame, withX = True):
 
             else: #the next value is NOT hex, but have to consider special chars (\n and \r)
                 if (i < len(dt) - 1 and dt[i:i+2] not in spec.keys()): ##change cond, just placeholder, but will need to handle special chars
-                    print(cleanDt)
-                    print(dt)
-                    print(dt[i:i+2])
-                    print(dt[i:i+2] in spec.keys())
+                    #print(cleanDt)
+                    #print(dt)
+                    #print(dt[i:i+2])
+                    #print(dt[i:i+2] in spec.keys())
                     # if (dt[i: i + 2] == '\\'):
                     #     i += 1
                     #     continue
@@ -321,7 +325,7 @@ def DtCleanerfml(frame, withX = True):
                         continue
                     
                     currV = dt[i]
-                    print(currV) #hex value of ascii
+                    #print(currV) #hex value of ascii
                     hexV = ord(currV)
                     hexV = hex(hexV)
                     hexV = str(hexV)
