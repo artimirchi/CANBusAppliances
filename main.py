@@ -1,4 +1,4 @@
-from subsystems.channels import GetChannelsConnected, getAppSelection, GetChannelMsgs, SelectChannel, GetChannelMsgstest
+from subsystems.channels import GetChannelsConnected, getAppSelection, GetChannelMsgs, SelectChannel, GetChannelMsgstest, sendFail
 from subsystems.translation import DtCleaner, SerialNumber, PartNumber, DtCleanerfml, DataClassifier, UsageTime, HealthMonitor,  allApps, getAppsConnected
 from canlib import Frame, canlib
 
@@ -256,11 +256,22 @@ def main2():
                 if (appCh != "Combi Oven"):
                     print("\n1. Heating system issues\n2. Phase Loss issues")
                     errorCh = input("Select the error type you wish to simulate:")
+                    if (errorCh not in ['1','2']):
+                        print("No operation associated with this option")
+                    else:
+                        sCh.busOff()
+                        sendFail(sCh, errorCh, appCh)
                     
 
                 else:
                     print("\n1. Heating system issues\n2. Phase Loss issues\n3. Magnetron issues")
                     errorCh = input("Select the error type you wish to simulate:")
+
+                    if (errorCh not in ['1','2', '3']):
+                        print("No operation associated with this option")
+                    else:
+                        sCh.busOff()
+                        sendFail(sCh, errorCh, appCh)
 
                 
 

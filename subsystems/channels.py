@@ -181,9 +181,39 @@ def getAppSelection():
     else:
         return a
     
+def getInfo(sCh, appCh):
+    sCh.busOn()
+    try:
+        frame = frame.id
+        if (frame.id in appCh and frame.dlc == 8):
+            #so its for the currentAppl
+            c = appCh[frame.id]
 
-def sendFailMsg():
+    except canlib.canNoMsg:
+        pass
     
+def sendChannelMsg(sCh, errorCh, appCh):
+    a = {"Combi Oven": combiOven, "Steam Oven": steamOven, "Espressor Maker": espressoMaker, "Coffee Maker": coffeeMaker, "Air Chiller": airChiller}
+    appCh = a[appCh]
+    sCh.busOn()
+    try:
+        frame = frame.read()
+        if (frame.dlc == 4): #so its from the EIu
+            if (frame.id in appCh): #so its rq
+                rq = appCh[frame.id]
+                if (rq == "first"):
+                
+                elif (rq == "second"):
+
+
+    except canlib.canNoMsg:
+        pass
+
+def sendFail(sCh, errorCh, appCh):
+    sCh.busOff()
+    sendChannelMsg(sCh, errorCh, appCh)
+
+
                 
 
             
