@@ -479,7 +479,7 @@ def getAppsConnected(sCh):
     global allApps
     sT = time.time()
 
-    while (time.time() - sT < 0.5):
+    while (time.time() - sT < 20):
         try:
             frame = sCh.read()
             if (frame.id in apps.keys()):
@@ -490,7 +490,7 @@ def getAppsConnected(sCh):
             pass
         except canlib.canError as ex:
             print(ex)
-
+    return allApps
 
 
     

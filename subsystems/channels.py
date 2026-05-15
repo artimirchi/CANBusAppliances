@@ -9,6 +9,8 @@ espressoMaker = {0x7B8:"first",0x7B9:"second",0x79A:"requested first",0x79B:"req
 airChiller = {0x7A8:"first",0x7A9:"second",0x78A:"requested first",0x78B:"requested second"}
 
 
+
+
 #dicts
 channelStatus = {1:"Error passive", 2: "Bus Off",4:"Error warning",8: "Error active",10:"Some msgs are pending transmission",40:"Works",20:"There are some msgs in the receive buffer",80:"Theres at least one TX error",100:"Theres at least one RX error",200:"Theres one HW buffer overflow",400:"Theres one SW buffer overflow"}
 
@@ -39,6 +41,7 @@ def SelectChannel(s, bitRate):
         return None
     ##can create an exception class to handle this when making the GUI
 
+
 def GetChannelMsgs(ch, sCh, sel):
     pNS = {}
     sNS = {}
@@ -51,18 +54,16 @@ def GetChannelMsgs(ch, sCh, sel):
         try:
             frame = sCh.read() #get da frame
             type = FrameTypeClassifier(frame) #who + type
-            if (type[0] not in sel):
-                continue
-            pci = PCIClassifier(frame) #get the frame type
 
-            if (pci == "FstF"):
+            pci = PCIClassifier(frame) #get the frame type
+            if (pci == "FstF" or type[1] == "first"):
                 sN = SerialNumber(frame)
                 
                 if (type[0] not in sNS.keys() or sNS[type[0]] != sN):
                     sNS[type[0]] = sN
                     print("\nThe serial number of the " +type[0] + " is " + str(sN))
 
-            elif (pci == "CF"):
+            elif (pci == "CF" or type[1] == "second"):
                 pN = PartNumber(frame)
 
                 if (type[0] not in pNS.keys() or pNS[type[0]] != pN):
@@ -72,7 +73,7 @@ def GetChannelMsgs(ch, sCh, sel):
                 uT = UsageTime(frame)
                 if (type[0] not in uTS.keys() or uTS[type[0]] != uT):
                     uTS[type[0]] = uT
-                    print("\nThe total usage time of the " + type[0]+"is " + str(uT) +" hours")
+                    print("\nThe total usage time of the " + type[0]+" is " + str(uT) +" hours")
 
                 hM = HealthMonitor(frame, type)
                 if (type[0] not in hMS.keys() or hMS[type[0]] != hMS):
@@ -179,6 +180,10 @@ def getAppSelection():
     
     else:
         return a
+    
+
+def sendFailMsg():
+    
                 
 
             

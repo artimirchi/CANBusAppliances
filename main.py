@@ -180,7 +180,7 @@ def main1():
     sBR = bitRatesCnst[bR]
     sCh = SelectChannel(ch, sBR)
 
-    a = getAppsConnected
+    a = getAppsConnected(sCh)
 
     if (a == None):
         raise ValueError("\nNone of the appliances selected exist.")
@@ -193,11 +193,6 @@ def main1():
 
 def test13():
     b = Frame(8847360, data=bytearray(b'\x0E\x05\x01\x86\x9f'), dlc=2, flags=0x4, timestamp=49)
-
-        
-
-    
- 
 
 
 
@@ -213,16 +208,75 @@ def getMsgs(sCh):
 def test111():
     GetChannelMsgstest()
 
+def main2():
+    a = GetChannelsConnected()
+    for i in range (canlib.getNumberOfChannels()):
+        print(str(a[i].channel_number) + ". " + a[i].channel_name)
 
+    ch = int(input("Select the channel number you wish to use:"))
+
+    #select the bitrate to use (for the WS, use 83.33 kbps)
+    print("Select the bitrate you wish to use")
+    bR = int(input(bitRates))
+
+    sBR = bitRatesCnst[bR]
+    sCh = SelectChannel(ch, sBR)
+
+    sCh.busOff()
+    sCh.busOn()
+
+    a = getAppsConnected(sCh)
+
+    
+    if (a == None or len(a) == 0):
+        raise ValueError("\nNone of the appliances selected exist.")
+    else:
+        print("\n1. View the logs\n2. Simulate error messages")
+        choice = input("What do you wish to do?")
+
+        if (choice == '1'):
+            sel = []
+            for i in range (len(a)):
+                print(str(i) + ". " + a[i])
+            sel = input("Which appliance do you wish to connect to? \nIf you want to select multiple, include a space between the numbers (ex. 2 3 7)")
+            sel2 = []
+            sel = sel.split(' ')
+            for i in range (len(sel)):
+                sel2.append(a[int(sel[i])])
+            print(sel2)
+            GetChannelMsgs(ch, sCh, sel2)
+        
+        elif (choice == '2'):
+            sel = []
+            for i in range (len(a)):
+                print(str(i) + ". " + a[i])
+                appCh = input("Which appliance do you wish to simulate?")
+                appCh = a[appCh]
+
+                if (appCh != "Combi Oven"):
+                    print("\n1. Heating system issues\n2. Phase Loss issues")
+                    errorCh = input("Select the error type you wish to simulate:")
+                    
+
+                else:
+                    print("\n1. Heating system issues\n2. Phase Loss issues\n3. Magnetron issues")
+                    errorCh = input("Select the error type you wish to simulate:")
+
+                
+
+        else:
+            print("There is no option associated with this number")
 
         
 
 if (__name__ == "__main__"):
+    main2()
+    #main1()
     # test1()
     # test2()
     # test3()
     #test4()
-    test111()
+    #test111()
     #test9()
     #test10()
     #test11()
@@ -235,5 +289,4 @@ if (__name__ == "__main__"):
     
     #print(DtCleanerfml(b))
     #print(dt)
-    #main()
-
+    
